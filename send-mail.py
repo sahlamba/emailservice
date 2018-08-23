@@ -1,3 +1,5 @@
+import os
+
 from smtplib import SMTP
 
 from email.mime.multipart import MIMEMultipart
@@ -5,11 +7,14 @@ from email.mime.text import MIMEText
 
 from string import Template
 
-FROM_EMAIL = '<from_email>'
-FROM_EMAIL_PASSWORD = '********'
+from dotenv import load_dotenv
+load_dotenv()
 
-RECEIVER_NAME = '<recipient_name>'
-RECEIVER_EMAIL = '<recipient_email>'
+FROM_EMAIL = os.getenv('SENDER_EMAIL')
+FROM_EMAIL_PASSWORD = os.getenv('SENDER_EMAIL_PASSWORD')
+
+RECEIVER_NAME = 'Sahil'
+RECEIVER_EMAIL = 'sahil.lamba95@gmail.com'
 
 
 def read_template(filename):
