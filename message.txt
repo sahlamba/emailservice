@@ -1,5 +1,0 @@
-${PERSON_NAME}, 
-
-Hi from the Pi!
-
-- RPi3
