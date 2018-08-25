@@ -27,12 +27,12 @@ server = SMTP(host='smtp.gmail.com', port=587)
 server.starttls()
 server.login(FROM_EMAIL, FROM_EMAIL_PASSWORD)
 
-message_template = read_template('template_reboot.txt')
+message_template = read_template(os.path.abspath('template_reboot.txt'))
 
 msg = MIMEMultipart()
 msg['From'] = FROM_EMAIL
 msg['To'] = RECEIVER_EMAIL
-msg['Subject'] = '[Ping] A Reboot happened'
+msg['Subject'] = '[Ping] A Boot/Reboot happened'
 
 message = message_template.substitute(RECIPIENT_NAME=RECEIVER_NAME)
 print(message)
