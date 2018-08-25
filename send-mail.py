@@ -10,6 +10,8 @@ from string import Template
 from dotenv import load_dotenv
 load_dotenv()
 
+dir_path = os.path.dirname(os.path.abspath(__file__))
+
 FROM_EMAIL = os.getenv('SENDER_EMAIL')
 FROM_EMAIL_PASSWORD = os.getenv('SENDER_EMAIL_PASSWORD')
 
@@ -27,7 +29,7 @@ server = SMTP(host='smtp.gmail.com', port=587)
 server.starttls()
 server.login(FROM_EMAIL, FROM_EMAIL_PASSWORD)
 
-message_template = read_template(os.path.abspath('template_reboot.txt'))
+message_template = read_template(os.path.join(dir_path, 'template_reboot.txt'))
 
 msg = MIMEMultipart()
 msg['From'] = FROM_EMAIL
