@@ -1,2 +1,2 @@
 #!/bin/bash
-/usr/bin/python3 /home/beebo/Projects/Python/emailservice/send-mail.py
+/usr/bin/python3 /usr/local/src/emailservice/send-mail.py

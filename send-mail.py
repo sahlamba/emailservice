@@ -32,7 +32,7 @@ server.starttls()
 server.login(FROM_EMAIL, FROM_EMAIL_PASSWORD)
 
 plain_message_template = read_template(os.path.join(dir_path, 'template_plain_reboot.txt'))
-html_message_template = codecs.open('template_html_reboot.html', 'r').read()
+html_message_template = codecs.open(os.path.join(dir_path, 'template_html_reboot.html'), 'r').read()
 
 msg = MIMEMultipart('alternative')
 msg['From'] = FROM_EMAIL

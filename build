@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo cp ./send-mail /usr/local/bin/send-mail
