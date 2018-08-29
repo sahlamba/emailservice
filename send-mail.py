@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import os
+import codecs
 
 from smtplib import SMTP
 
@@ -30,17 +31,22 @@ server = SMTP(host='smtp.gmail.com', port=587)
 server.starttls()
 server.login(FROM_EMAIL, FROM_EMAIL_PASSWORD)
 
-message_template = read_template(os.path.join(dir_path, 'template_reboot.txt'))
+plain_message_template = read_template(os.path.join(dir_path, 'template_plain_reboot.txt'))
+html_message_template = codecs.open('template_html_reboot.html', 'r').read()
 
-msg = MIMEMultipart()
+msg = MIMEMultipart('alternative')
 msg['From'] = FROM_EMAIL
 msg['To'] = RECEIVER_EMAIL
 msg['Subject'] = '[Ping] A Boot/Reboot happened'
 
-message = message_template.substitute(RECIPIENT_NAME=RECEIVER_NAME)
-print(message)
+plain_message = plain_message_template.substitute(RECIPIENT_NAME=RECEIVER_NAME)
+print(plain_message)
 
-msg.attach(MIMEText(message, 'plain'))
+html_message = html_message_template.format(RECIPIENT_NAME=RECEIVER_NAME)
+print(html_message)
+
+msg.attach(MIMEText(plain_message, 'plain'))
+msg.attach(MIMEText(html_message, 'html'))
 
 server.send_message(msg)
 del msg
