@@ -1,2 +1,15 @@
 #!/bin/bash
+
+while true; do
+    # Test for Internet...
+    wget -q --tries=10 --timeout=20 --spider http://google.com
+    if [ $? -eq 0 ]; then
+        break
+    else
+        # Not connected, sleeping for a second
+        sleep 1
+    fi
+done
+
+# Now connected, run the script
 /usr/bin/python3 /usr/local/src/emailservice/send-mail.py
