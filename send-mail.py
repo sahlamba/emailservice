@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import os
+import sys
 import codecs
 
 from smtplib import SMTP
@@ -10,47 +11,80 @@ from email.mime.text import MIMEText
 from string import Template
 
 from dotenv import load_dotenv
-load_dotenv()
 
-dir_path = os.path.dirname(os.path.abspath(__file__))
+DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 
-FROM_EMAIL = os.getenv('SENDER_EMAIL')
-FROM_EMAIL_PASSWORD = os.getenv('SENDER_EMAIL_PASSWORD')
-
-RECEIVER_NAME = 'Sahil'
-RECEIVER_EMAIL = 'sahil.lamba95@gmail.com'
-
-
-def read_template(filename):
+def read_txt_template(filename):
+    print('Reading txt file...')
     with open(filename, 'r', encoding='utf-8') as template_file:
         template_file_content = template_file.read()
+    print('Reading txt file... Success.')
     return Template(template_file_content)
 
+def build_plain_message(path):
+    print('Building plain message...')
+    # path is supposed to be relative to cwd
+    message_template = read_txt_template(os.path.join(os.getcwd(), path))
+    message = message_template.substitute()
+    msg = MIMEMultipart('alternative')
+    msg['From'] = os.getenv('SENDER_EMAIL')
+    msg['To'] = os.getenv('RECEIVER_EMAIL')
+    msg['Subject'] = os.getenv('EMAIL_SUBJECT')
+    msg.attach(MIMEText(message, 'plain'))
+    print('Building plain message... Success.')
+    return msg
 
-server = SMTP(host='smtp.gmail.com', port=587)
-server.starttls()
-server.login(FROM_EMAIL, FROM_EMAIL_PASSWORD)
+def build_html_message(path):
+    print('Building HTML message...')
+    EMAIL_SUBJECT = os.getenv('EMAIL_SUBJECT')
+    # path is supposed to be relative to cwd
+    message_template = codecs.open(os.path.join(os.getcwd(), path), 'r').read()
+    message = message_template.format(EMAIL_SUBJECT=EMAIL_SUBJECT)
+    msg = MIMEMultipart('alternative')
+    msg['From'] = os.getenv('SENDER_EMAIL')
+    msg['To'] = os.getenv('RECEIVER_EMAIL')
+    msg['Subject'] = EMAIL_SUBJECT
+    msg.attach(MIMEText(message, 'html'))
+    print('Building HTML message... Success.')
+    return msg
 
-plain_message_template = read_template(os.path.join(dir_path, 'template_plain_reboot.txt'))
-html_message_template = codecs.open(os.path.join(dir_path, 'template_html_reboot.html'), 'r').read()
+def send_mail(msg):
+    # Load .env vars
+    SMTP_HOST = os.getenv('SMTP_HOST')
+    SMTP_PORT = os.getenv('SMTP_PORT')
+    SENDER_EMAIL = os.getenv('SENDER_EMAIL')
+    SENDER_EMAIL_PASSWORD = os.getenv('SENDER_EMAIL_PASSWORD')
+    # Set SMTP server
+    print('Setting up SMTP connection... host: ' + SMTP_HOST)
+    server = SMTP(host=SMTP_HOST, port=SMTP_PORT)
+    # Start TLS handshake
+    server.starttls()
+    # Login to SMTP host
+    print('Logging in to account: ' + SENDER_EMAIL + '...')
+    server.login(SENDER_EMAIL, SENDER_EMAIL_PASSWORD)
+    # Send message
+    print('Sending message...')
+    server.send_message(msg)
+    print('Closing server connection...')
+    # Close connection to host
+    server.quit()
+    print('Completed. Mail sent successfully.')
 
-msg = MIMEMultipart('alternative')
-msg['From'] = FROM_EMAIL
-msg['To'] = RECEIVER_EMAIL
-msg['Subject'] = '[Ping] A Boot/Reboot happened'
+def plain():
+    msg = build_plain_message('templates/reboot.txt')
+    send_mail(msg)
 
-plain_message = plain_message_template.substitute(RECIPIENT_NAME=RECEIVER_NAME)
-print(plain_message)
+def html():
+    msg = build_html_message('templates/reboot.html')
+    send_mail(msg)
 
-html_message = html_message_template.format(RECIPIENT_NAME=RECEIVER_NAME)
-print(html_message)
+def main():
+    # Load .env
+    load_dotenv()
+    # Send plain text mail
+    plain()
+    # Send HTML content mail
+    html()
 
-msg.attach(MIMEText(plain_message, 'plain'))
-msg.attach(MIMEText(html_message, 'html'))
-
-server.send_message(msg)
-del msg
-
-server.quit()
-
-print('Complete! Mail sent successfully.')
+if __name__ == "__main__":
+    main()

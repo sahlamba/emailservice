@@ -3,7 +3,10 @@
 while true; do
     # Test for Internet...
     wget -q --tries=10 --timeout=20 --spider http://google.com
-    if [ $? -eq 0 ]; then
+    if [ $? -eq 127 ]; then
+        echo 'wget: command not found, skipping net test, may/may not send mail.'
+        break
+    elif [ $? -eq 0 ]; then
         break
     else
         # Not connected, sleeping for a second
@@ -11,5 +14,5 @@ while true; do
     fi
 done
 
-# Now connected, run the script
-/usr/bin/python3 /usr/local/src/emailservice/send-mail.py
+# Now connected, run the script in virtual env
+/usr/local/bin/pipenv run python3 ./send-mail.py
