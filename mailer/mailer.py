@@ -10,8 +10,6 @@ from email.mime.text import MIMEText
 
 from string import Template
 
-from dotenv import load_dotenv
-
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 
 def read_txt_template(filename):
@@ -69,22 +67,3 @@ def send_mail(msg):
     # Close connection to host
     server.quit()
     print('Completed. Mail sent successfully.')
-
-def plain():
-    msg = build_plain_message('templates/reboot.txt')
-    send_mail(msg)
-
-def html():
-    msg = build_html_message('templates/reboot.html')
-    send_mail(msg)
-
-def main():
-    # Load .env
-    load_dotenv()
-    # Send plain text mail
-    plain()
-    # Send HTML content mail
-    html()
-
-if __name__ == "__main__":
-    main()

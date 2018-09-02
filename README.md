@@ -48,11 +48,11 @@ EMAIL_SUBJECT='A message from the Pi'
 Run the script in virtualenv -
 
 ```shell
-$ pipenv run python3 ./send-mail.py
+$ pipenv run python3 main.py
 ```
 
 ### Customize the Program
 
 - Edit account details and email subject in `.env` file.
 - Edit the message templates in the [templates](templates) dir.
-- Edit type of message sent in `main()` in [send-mail.py](send-mail.py).
+- Edit type of message sent in `main()` in [main.py](main.py).
