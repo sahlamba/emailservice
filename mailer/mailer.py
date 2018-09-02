@@ -19,28 +19,29 @@ def read_txt_template(filename):
     print('Reading txt file... Success.')
     return Template(template_file_content)
 
-def build_plain_message(path):
+def build_plain_message(path, recipient_email):
     print('Building plain message...')
     # path is supposed to be relative to cwd
     message_template = read_txt_template(os.path.join(os.getcwd(), path))
-    message = message_template.substitute()
+    message = message_template.substitute(MACHINE=os.getenv('MACHINE_NAME'))
     msg = MIMEMultipart('alternative')
     msg['From'] = os.getenv('SENDER_EMAIL')
-    msg['To'] = os.getenv('RECEIVER_EMAIL')
+    msg['To'] = recipient_email
     msg['Subject'] = os.getenv('EMAIL_SUBJECT')
     msg.attach(MIMEText(message, 'plain'))
     print('Building plain message... Success.')
     return msg
 
-def build_html_message(path):
+def build_html_message(path, recipient_email):
     print('Building HTML message...')
     EMAIL_SUBJECT = os.getenv('EMAIL_SUBJECT')
+    MACHINE_NAME = os.getenv('MACHINE_NAME')
     # path is supposed to be relative to cwd
     message_template = codecs.open(os.path.join(os.getcwd(), path), 'r').read()
-    message = message_template.format(EMAIL_SUBJECT=EMAIL_SUBJECT)
+    message = message_template.format(EMAIL_SUBJECT=EMAIL_SUBJECT, MACHINE=MACHINE_NAME)
     msg = MIMEMultipart('alternative')
     msg['From'] = os.getenv('SENDER_EMAIL')
-    msg['To'] = os.getenv('RECEIVER_EMAIL')
+    msg['To'] = recipient_email
     msg['Subject'] = EMAIL_SUBJECT
     msg.attach(MIMEText(message, 'html'))
     print('Building HTML message... Success.')

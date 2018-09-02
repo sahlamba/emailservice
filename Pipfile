@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 python-dotenv = "*"
+click = "*"
 
 [dev-packages]
 pylint = "<2.0.0"

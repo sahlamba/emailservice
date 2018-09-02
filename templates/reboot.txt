@@ -1,6 +1,0 @@
-Ping,
-
-This is an auto-generated notification message from raspberry-pi 3 machine: venzenulon7, a Boot/Reboot happened that triggered this alert.
-
-Signed,
-venzenulon7

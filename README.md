@@ -35,10 +35,9 @@ Create a `.env` file in the root dir with the following keys -
 SMTP_HOST='smtp.gmail.com'
 SMTP_PORT=587
 
+MACHINE_NAME='<any_name>'
 SENDER_EMAIL='<sender_email_address>'
 SENDER_EMAIL_PASSWORD='<password>'
-
-RECEIVER_EMAIL='<receiver_email_address>'
 
 EMAIL_SUBJECT='A message from the Pi'
 ```

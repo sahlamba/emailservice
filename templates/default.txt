@@ -1,0 +1,6 @@
+Ping!
+
+This is an auto-generated notification message from raspberry-pi 3 machine: ${MACHINE}.
+
+Signed,
+${MACHINE}
