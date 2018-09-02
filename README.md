@@ -38,8 +38,6 @@ SMTP_PORT=587
 MACHINE_NAME='<any_name>'
 SENDER_EMAIL='<sender_email_address>'
 SENDER_EMAIL_PASSWORD='<password>'
-
-EMAIL_SUBJECT='A message from the Pi'
 ```
 
 ### Script Usage

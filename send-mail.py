@@ -4,8 +4,8 @@ import click
 from mailer import mailer
 from dotenv import load_dotenv
 
-def plain(recipient_email):
-    msg = mailer.build_plain_message('templates/default.txt', recipient_email)
+def plain(recipient_email, sub, mesg):
+    msg = mailer.build_plain_message('templates/default.txt', recipient_email, sub, mesg)
     mailer.send_mail(msg)
 
 def html(recipient_email):
@@ -13,14 +13,14 @@ def html(recipient_email):
     mailer.send_mail(msg)
 
 @click.command()
-@click.option('--s', help='Subject of the email.')
-@click.option('--m', help='Message to be sent.')
+@click.option('-s', '--subject', help="Subject of the email.")
+@click.option('-m', '--message', help="Message to be sent in the email.")
 @click.argument('recipient_email')
-def send(s, m, recipient_email):
+def send(subject, message, recipient_email):
     # Load .env
     load_dotenv()
     # Send plain text mail
-    plain(recipient_email)
+    plain(recipient_email, subject, message)
     # Send HTML content mail
     # html()
 
